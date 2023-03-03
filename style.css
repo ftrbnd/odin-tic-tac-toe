@@ -1,0 +1,43 @@
+:root {
+    --olivia-pink: #E8C4B8;
+    --olivia-black: #363636;
+    --olivia-white: #f0f0f0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--olivia-pink);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+h1 {
+    color: var(--olivia-white);
+}
+
+div#gameBoard {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+
+    font-size: 4rem;
+}
+
+div.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    padding: 2rem;
+    width: 4rem;
+    height: 4rem;
+}
