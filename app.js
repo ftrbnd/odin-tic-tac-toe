@@ -15,6 +15,29 @@ const Gameboard = (function () {
     };
 })();
 
+const DisplayController = (function () {
+    let playerOneTurn = true;
+
+    const playGame = () => {
+        displayNewGame(Gameboard.board);
+        attachSquareListeners();
+
+        if (playerOneTurn) {
+            // player one makes move
+            
+            playerOneTurn = false;
+        } else {
+            // player two makes move
+
+            playerOneTurn = true;
+        }
+    }
+
+    return {
+        playGame
+    };
+})();
+
 function displayNewGame(board) {
     const gameBoardDiv = document.querySelector('#gameBoard');
 
@@ -22,6 +45,7 @@ function displayNewGame(board) {
         const spaceDiv = document.createElement('div');
         spaceDiv.classList.add('square');
         spaceDiv.setAttribute('id', `${i}`);
+        board[i] = '_';
         spaceDiv.innerText = board[i];
 
         if (i % 2 == 0) {
@@ -51,4 +75,8 @@ function displayNewGame(board) {
     }
 }
 
-displayNewGame(Gameboard.board) 
+function attachSquareListeners() {
+    
+}
+
+DisplayController.playGame();
