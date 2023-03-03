@@ -15,26 +15,29 @@ const Gameboard = (function () {
     };
 })();
 
+const Player = (name, marker) => {
+    const getName = () => name;
+    const getMarker = () => marker;
+
+    return {
+        getName,
+        getMarker
+    };
+};
+
 const DisplayController = (function () {
+    const playerOne = Player('Player 1', 'X');
+    const playerTwo = Player('Player 2', 'O');
     let playerOneTurn = true;
 
     const playGame = () => {
         displayNewGame(Gameboard.board);
-        attachSquareListeners();
-
-        if (playerOneTurn) {
-            // player one makes move
-            
-            playerOneTurn = false;
-        } else {
-            // player two makes move
-
-            playerOneTurn = true;
-        }
+        attachSquareListeners(playerOne, playerTwo);
     }
 
     return {
-        playGame
+        playGame,
+        playerOneTurn
     };
 })();
 
@@ -75,8 +78,23 @@ function displayNewGame(board) {
     }
 }
 
-function attachSquareListeners() {
+function attachSquareListeners(playerOne, playerTwo) {
+    const squares = document.querySelectorAll('div.square');
     
+    for (const square of squares) {
+        square.addEventListener('click', () => {
+            if (DisplayController.playerOneTurn) {
+                square.innerText = playerOne.getMarker();
+                Gameboard.board[square.id] = playerOne.getMarker();
+                DisplayController.playerOneTurn = false;
+            } else {
+                square.innerText = playerTwo.getMarker();
+                Gameboard.board[square.id] = playerTwo.getMarker();
+                DisplayController.playerOneTurn = true;
+            }
+            console.log(Gameboard.board);
+        });
+    }
 }
 
 DisplayController.playGame();
