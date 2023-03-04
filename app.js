@@ -109,6 +109,17 @@ function attachSquareListeners(playerOne, playerTwo) {
 function checkForWinner(player, squareDiv) {
     if (squareDiv.innerText != '_' && findLine(squareDiv.id)) {
         alert(`${player.getName()} (${player.getMarker()}) wins!`);
+        return DisplayController.playGame();
+    }
+
+    let emptySquareCount = 0;
+    for (let i = 0; i < Gameboard.board.length; i++) {
+        if (Gameboard.board[i] == '_')
+            emptySquareCount += 1;
+    }
+
+    if (emptySquareCount == 0) {
+        alert('Tie!');
         DisplayController.playGame();
     }
 }
