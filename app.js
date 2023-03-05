@@ -26,15 +26,15 @@ const Player = (name, marker) => {
 };
 
 const DisplayController = (function () {
-    const playerOne = Player('Player 1', 'X');
-    const playerTwo = Player('Player 2', 'O');
+    const playerOne = Player('P1', 'X');
+    const playerTwo = Player('P2', 'O');
     let playerOneTurn = true;
     let endGame = false;
 
     const playGame = () => {
         displayNewGame(Gameboard.board);
         attachSquareListeners(playerOne, playerTwo);
-        attachButtonListener();
+        attachClickListeners();
     }
 
     return {
@@ -54,6 +54,14 @@ function displayNewGame(board) {
 
     const winnerText = document.querySelector('p#winner');
     winnerText.innerText = '';
+
+    const newGameButton = document.querySelector('button#newGame');
+    newGameButton.removeEventListener('click', startNewGame);
+
+    const enterPlayerNames = document.querySelectorAll('.players h2');
+    for (const playerName of enterPlayerNames) {
+        playerName.removeEventListener('click', setPlayerName);
+    }
 
     for (let i = 0; i < board.length; i++) {
         const spaceDiv = document.createElement('div');
@@ -113,11 +121,23 @@ function attachSquareListeners(playerOne, playerTwo) {
     }
 }
 
-function attachButtonListener() {
+function attachClickListeners() {
     const newGameButton = document.querySelector('button#newGame');
-    newGameButton.addEventListener('click', () => {
-        DisplayController.playGame();
-    });
+    newGameButton.addEventListener('click', startNewGame);
+
+    const enterPlayerNames = document.querySelectorAll('.players h2');
+    for (const playerName of enterPlayerNames) {
+        playerName.addEventListener('click', setPlayerName);
+    }
+}
+
+function startNewGame() {
+    console.log('Starting new game...');
+    DisplayController.playGame();
+}
+ 
+function setPlayerName(event) {
+    console.log(`Setting ${event.target.innerText}'s name...`);
 }
 
 function checkForWinner(player, squareDiv) {
