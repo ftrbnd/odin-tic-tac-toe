@@ -22,6 +22,37 @@ body {
 
 h1 {
     color: var(--olivia-white);
+    font-size: 5rem;
+}
+
+div.display {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+button#newGame {
+    height: min-content;
+    width: fit-content;
+    
+    padding: 16px;
+    border: 5px solid var(--olivia-white);
+    border-radius: 15px;
+    font-weight: bold;
+    justify-self: end;
+    align-self: center;
+
+    color: var(--olivia-pink);
+    background-color: var(--olivia-black);
+}
+
+button:hover {
+    cursor: pointer;
+    background-image: linear-gradient(rgb(0 0 0/40%) 0 0);
+}
+
+button:active {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.4) 0 0);
 }
 
 div#gameBoard {
@@ -40,4 +71,16 @@ div.square {
     padding: 2rem;
     width: 4rem;
     height: 4rem;
+}
+
+div.bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+p#winner {
+    font-size: 3rem;
+    font-weight: bolder;
+    color: var(--olivia-black);
 }

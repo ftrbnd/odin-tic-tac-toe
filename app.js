@@ -29,24 +29,31 @@ const DisplayController = (function () {
     const playerOne = Player('Player 1', 'X');
     const playerTwo = Player('Player 2', 'O');
     let playerOneTurn = true;
+    let endGame = false;
 
     const playGame = () => {
         displayNewGame(Gameboard.board);
         attachSquareListeners(playerOne, playerTwo);
+        attachButtonListener();
     }
 
     return {
-        playGame,
-        playerOneTurn
+        playerOneTurn,
+        endGame,
+        playGame
     };
 })();
 
 function displayNewGame(board) {
-    const gameBoardDiv = document.querySelector('#gameBoard');
+    DisplayController.endGame = false;
 
+    const gameBoardDiv = document.querySelector('#gameBoard');
     while (gameBoardDiv.firstChild) {
         gameBoardDiv.removeChild(gameBoardDiv.firstChild);
     }
+
+    const winnerText = document.querySelector('p#winner');
+    winnerText.innerText = '';
 
     for (let i = 0; i < board.length; i++) {
         const spaceDiv = document.createElement('div');
@@ -87,7 +94,7 @@ function attachSquareListeners(playerOne, playerTwo) {
     
     for (const square of squares) {
         square.addEventListener('click', () => {
-            if (square.innerText == '_') {
+            if (square.innerText == '_' && !DisplayController.endGame) {
                 if (DisplayController.playerOneTurn) {
                     square.innerText = playerOne.getMarker();
                     Gameboard.board[square.id] = playerOne.getMarker();
@@ -106,10 +113,19 @@ function attachSquareListeners(playerOne, playerTwo) {
     }
 }
 
+function attachButtonListener() {
+    const newGameButton = document.querySelector('button#newGame');
+    newGameButton.addEventListener('click', () => {
+        DisplayController.playGame();
+    });
+}
+
 function checkForWinner(player, squareDiv) {
+    const winnerText = document.querySelector('p#winner');
+
     if (squareDiv.innerText != '_' && findLine(squareDiv.id)) {
-        alert(`${player.getName()} (${player.getMarker()}) wins!`);
-        return DisplayController.playGame();
+        winnerText.innerText = `WINNER: ${player.getName()}!`;
+        return DisplayController.endGame = true;
     }
 
     let emptySquareCount = 0;
@@ -119,8 +135,7 @@ function checkForWinner(player, squareDiv) {
     }
 
     if (emptySquareCount == 0) {
-        alert('Tie!');
-        DisplayController.playGame();
+        winnerText.innerText = 'Tie...';
     }
 }
 
