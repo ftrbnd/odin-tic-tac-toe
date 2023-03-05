@@ -107,11 +107,13 @@ function attachSquareListeners(playerOne, playerTwo) {
                     square.innerText = playerOne.getMarker();
                     Gameboard.board[square.id] = playerOne.getMarker();
                     DisplayController.playerOneTurn = false;
+                    console.log(`${playerOne.getName()} placed ${playerOne.getMarker()} on square #${square.id}`);
                     checkForWinner(playerOne, square);
                 } else {
                     square.innerText = playerTwo.getMarker();
                     Gameboard.board[square.id] = playerTwo.getMarker();
                     DisplayController.playerOneTurn = true;
+                    console.log(`${playerTwo.getName()} placed ${playerTwo.getMarker()} on square #${square.id}`);
                     checkForWinner(playerTwo, square);
                 }
 
@@ -145,6 +147,7 @@ function checkForWinner(player, squareDiv) {
 
     if (squareDiv.innerText != '_' && findLine(squareDiv.id)) {
         winnerText.innerText = `WINNER: ${player.getName()}!`;
+        console.log(`${player.getName()} wins!`)
         return DisplayController.endGame = true;
     }
 
