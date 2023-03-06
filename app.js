@@ -16,11 +16,11 @@ const Gameboard = (function () {
 })();
 
 const Player = (name, marker) => {
-    const getName = () => name;
     const getMarker = () => marker;
 
     return {
-        getName,
+        name,
+        marker,
         getMarker
     };
 };
@@ -33,11 +33,13 @@ const DisplayController = (function () {
 
     const playGame = () => {
         displayNewGame(Gameboard.board);
-        attachSquareListeners(playerOne, playerTwo);
+        attachSquareListeners();
         attachClickListeners();
     }
 
     return {
+        playerOne,
+        playerTwo,
         playerOneTurn,
         endGame,
         playGame
@@ -46,6 +48,7 @@ const DisplayController = (function () {
 
 function displayNewGame(board) {
     DisplayController.endGame = false;
+    DisplayController.playerOneTurn = true;
 
     const gameBoardDiv = document.querySelector('#gameBoard');
     while (gameBoardDiv.firstChild) {
@@ -97,24 +100,25 @@ function displayNewGame(board) {
     }
 }
 
-function attachSquareListeners(playerOne, playerTwo) {
+function attachSquareListeners() {
     const squares = document.querySelectorAll('div.square');
     
     for (const square of squares) {
         square.addEventListener('click', () => {
+            console.log(`square #${square.id} was clicked`)
             if (square.innerText == '_' && !DisplayController.endGame) {
                 if (DisplayController.playerOneTurn) {
-                    square.innerText = playerOne.getMarker();
-                    Gameboard.board[square.id] = playerOne.getMarker();
+                    square.innerText = DisplayController.playerOne.getMarker();
+                    Gameboard.board[square.id] = DisplayController.playerOne.getMarker();
                     DisplayController.playerOneTurn = false;
-                    console.log(`${playerOne.getName()} placed ${playerOne.getMarker()} on square #${square.id}`);
-                    checkForWinner(playerOne, square);
+                    console.log(`${DisplayController.playerOne.name} placed ${DisplayController.playerOne.getMarker()} on square #${square.id}`);
+                    checkForWinner(DisplayController.playerOne, square);
                 } else {
-                    square.innerText = playerTwo.getMarker();
-                    Gameboard.board[square.id] = playerTwo.getMarker();
+                    square.innerText = DisplayController.playerTwo.getMarker();
+                    Gameboard.board[square.id] = DisplayController.playerTwo.getMarker();
                     DisplayController.playerOneTurn = true;
-                    console.log(`${playerTwo.getName()} placed ${playerTwo.getMarker()} on square #${square.id}`);
-                    checkForWinner(playerTwo, square);
+                    console.log(`${DisplayController.playerTwo.name} placed ${DisplayController.playerTwo.getMarker()} on square #${square.id}`);
+                    checkForWinner(DisplayController.playerTwo, square);
                 }
 
                 console.log(Gameboard.board);
@@ -139,15 +143,31 @@ function startNewGame() {
 }
  
 function setPlayerName(event) {
+    if (DisplayController.endGame) return;
+
     console.log(`Setting ${event.target.innerText}'s name...`);
+
+    const displayPlayerName = event.target.nextElementSibling.firstElementChild;
+    const chosenPlayerName = prompt(`Enter ${displayPlayerName.innerText}'s name:`);
+    
+    if (chosenPlayerName) {
+        displayPlayerName.innerText = chosenPlayerName;
+        if (displayPlayerName.id == 'p1') {
+            DisplayController.playerOne.name = chosenPlayerName;
+        } else {
+            DisplayController.playerTwo.name = chosenPlayerName;
+        }
+
+        console.log(`Set ${displayPlayerName.id}'s name to ${chosenPlayerName}`);
+    }
 }
 
 function checkForWinner(player, squareDiv) {
     const winnerText = document.querySelector('p#winner');
 
     if (squareDiv.innerText != '_' && findLine(squareDiv.id)) {
-        winnerText.innerText = `WINNER: ${player.getName()}!`;
-        console.log(`${player.getName()} wins!`)
+        winnerText.innerText = `WINNER: ${player.name}!`;
+        console.log(`${player.name} wins!`)
         return DisplayController.endGame = true;
     }
 
