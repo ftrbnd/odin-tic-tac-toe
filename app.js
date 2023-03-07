@@ -148,9 +148,11 @@ function setPlayerName(event) {
     console.log(`Setting ${event.target.innerText}'s name...`);
 
     const displayPlayerName = event.target.nextElementSibling.lastElementChild;
-    const chosenPlayerName = prompt(`Enter ${displayPlayerName.innerText}'s name:`);
+    let chosenPlayerName = prompt(`Enter ${displayPlayerName.innerText}'s name:`);
     
     if (chosenPlayerName) {
+        chosenPlayerName = chosenPlayerName.substring(0, 10);
+
         displayPlayerName.innerText = chosenPlayerName;
         if (displayPlayerName.id == 'p1') {
             DisplayController.playerOne.name = chosenPlayerName;
